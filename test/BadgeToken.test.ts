@@ -30,7 +30,7 @@ describe("BadgeToken", function () {
     expect(await badge.symbol()).to.equal(_symbol)
   })
 
-  it("Should mint a token with token ID 1 & 2 to account1", async function () {
+  it("Should mint two token with token ID 1 & 2 to account1", async function () {
     const address1=await account1.getAddress()
     await badge.mintTo(address1)
     expect(await badge.ownerOf(1)).to.equal(address1)
@@ -41,4 +41,10 @@ describe("BadgeToken", function () {
     expect(await badge.balanceOf(address1)).to.equal(2)
   })
 
+  it("Should mint a token with event", async function () {
+    const address1=await account1.getAddress()
+    await expect(badge.mintTo(address1))
+    .to.emit(badge, 'Transfer')
+    .withArgs(ethers.constants.AddressZero,address1, 1)
+  })  
 })
