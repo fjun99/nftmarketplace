@@ -34,14 +34,39 @@ async function main() {
   console.log("marketAddress",marketAddress)
   console.log("nftContractAddress",tokenAddress)
 
-  /* create two tokens */
+  // /* create two tokens */
   const address0=await owner.getAddress()
-  await nft.mintTo(address0) //'1'
-  await nft.mintTo(address0) //'2' 
-  await nft.mintTo(address0) //'3'
+  const address1=await account1.getAddress()
 
-  console.log(await nft.balanceOf(address0))
+  // await nft.mintTo(address1) //'1'
+  // await nft.mintTo(address1) //'2' 
+  // await nft.mintTo(address1) //'3'
 
+  // console.log(await nft.balanceOf(address0))
+  // await nft.connect(account1).approve(marketAddress,10)
+  // await nft.connect(account1).approve(marketAddress,11)
+  // await nft.connect(account1).approve(marketAddress,12)
+
+
+  // await nft.approve(marketAddress,7)
+  // await nft.approve(marketAddress,8)
+  // await nft.approve(marketAddress,9)
+  console.log("Approve marketAddress",marketAddress)
+
+  const listingFee = await market.getListingFee()
+  const auctionPrice = ethers.utils.parseUnits('1', 'ether')
+
+  // /* put both tokens for sale */
+  // await market.createMarketItem(tokenAddress, 7, auctionPrice, { value: listingFee })
+  // await market.createMarketItem(tokenAddress, 8, auctionPrice, { value: listingFee })
+  // await market.createMarketItem(tokenAddress, 9, auctionPrice, { value: listingFee })
+
+  // await market.connect(account1).createMarketItem(tokenAddress, 10, auctionPrice, { value: listingFee })
+  // await market.connect(account1).createMarketItem(tokenAddress, 11, auctionPrice, { value: listingFee })
+  // await market.connect(account1).createMarketItem(tokenAddress, 12, auctionPrice, { value: listingFee })
+
+  await market.createMarketSale(tokenAddress, 10, { value: auctionPrice})
+  await market.createMarketSale(tokenAddress, 11, { value: auctionPrice})
 }
 
 async function parseItems(items:any,nft:BadgeToken) {

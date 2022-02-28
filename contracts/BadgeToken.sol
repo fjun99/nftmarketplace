@@ -56,7 +56,9 @@ contract BadgeToken is ERC721 {
 
     function tokenURI(uint256 tokenId) override public pure returns (string memory) {
         string[17] memory parts;
-        parts[0] = "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 20px; }</style><rect width='100%' height='100%' fill='black' /><text x='10' y='20' class='base'>";
+        // parts[0] = "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 20px; }</style><rect width='100%' height='100%' fill='black' /><text x='10' y='20' class='base'>";
+        parts[0] = "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 300px; }</style><rect width='100%' height='100%' fill='brown' /><text x='100' y='260' class='base'>";
+        // parts[0] = "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 300px;  }</style><rect width='100%' height='100%' fill='#777755' /><text x='100' y='260' class='base'>";
 
         parts[1] = Strings.toString(tokenId);
 
