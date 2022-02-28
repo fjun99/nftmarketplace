@@ -1,7 +1,7 @@
 import { Signer } from "ethers"
 import { ethers } from "hardhat"
 import { BadgeToken, NFTMarketplace } from  "../typechain"
-import { tokenAddress, marketAddress } from "./constants"
+import { tokenAddress, marketAddress } from "./projectsetting"
 const base64 = require( "base-64")
 
 const _name='BadgeToken'
