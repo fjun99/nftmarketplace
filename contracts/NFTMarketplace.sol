@@ -116,23 +116,29 @@ contract NFTMarketplace is ReentrancyGuard {
    * @dev delete a MarketItem from the marketplace.
    * 
    * de-List a NFT.
+   * 
+   * todo ERC721.approve can't work properly!! comment out
    */
   function deleteMarketItem(uint256 itemId) public nonReentrant {
-
     require(itemId <= _itemCounter.current(), "id must <= item count");
+    require(marketItems[itemId].state == State.Created, "item must be on market");
     MarketItem storage item = marketItems[itemId];
 
     require(IERC721(item.nftContract).ownerOf(item.tokenId) == msg.sender, "must be the owner");
     require(IERC721(item.nftContract).getApproved(item.tokenId) == address(this), "NFT must be approved to market");
 
     // delegatecall by msg.sender to nft.approve()
-    (bool success, )  = address(item.nftContract).delegatecall(
-              abi.encodeWithSignature("approve(address,uint256)",address(0), item.tokenId)
+
+    // IERC721(item.nftContract).approve(address(0x70997970C51812dc3A010C7d01b50e0d17dc79C8), 1); //must approve all
+
+/*
+    (bool success, )  = 
+    address(item.nftContract).delegatecall(
+              abi.encodeWithSignature("approve(address,uint256)",0x70997970C51812dc3A010C7d01b50e0d17dc79C8, 1)
             );
-
+    require(success,"delegate call should succeed");  
+*/
     item.state = State.Inactive;
-
-    require(!success,"delegate call ");  
 
     emit MarketItemSaled(
       itemId,
@@ -144,7 +150,7 @@ contract NFTMarketplace is ReentrancyGuard {
       State.Inactive
     );
 
-    console.log("item.state",2);
+    // console.log("item.state",uint(item.state));
 
     //https://docs.soliditylang.org/en/v0.8.12/control-structures.html
     //The low-level functions call, delegatecall and staticcall return true as their first return value 

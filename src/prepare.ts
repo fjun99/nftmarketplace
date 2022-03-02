@@ -2,7 +2,6 @@ import { Signer } from "ethers"
 import { ethers } from "hardhat"
 import { BadgeToken, NFTMarketplace } from  "../typechain"
 import { tokenAddress, marketAddress } from "./projectsetting"
-const base64 = require( "base-64")
 
 const _name='BadgeToken'
 const _symbol='BADGE'
@@ -19,7 +18,6 @@ async function main() {
   /* deploy the marketplace */
   const Market = await ethers.getContractFactory("NFTMarketplace")
   const marketContract:NFTMarketplace = await Market.deploy()
-  await marketContract.deployed()
   
   console.log("nftContractAddress:",nftContract.address)
   console.log("marketAddress     :",marketContract.address)
@@ -53,7 +51,7 @@ async function main() {
     await market.createMarketItem(tokenAddress, i, auctionPrice, { value: listingFee })
   }
 
-  console.log("3. == mint 7-9 to account#0")
+  console.log("3. == mint 7-9 to account#1")
   for(let i=7;i<=9;i++){
     await nft.connect(account1).mintTo(address1)
   }

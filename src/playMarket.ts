@@ -12,9 +12,9 @@ const _symbol='BADGE'
 
 async function main() {
 
-  let owner:Signer,account1:Signer,otheraccounts:Signer[]
+  let owner:Signer,account1:Signer
   
-  [owner, account1, ...otheraccounts] = await ethers.getSigners()
+  [owner, account1] = await ethers.getSigners()
 
   // const market:NFTMarketplace = await ethers.getContractAt("NFTMarketplace", marketAddress)
   // const nft:BadgeToken = await ethers.getContractAt("BadgeToken", tokenAddress)

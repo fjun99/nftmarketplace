@@ -1,5 +1,14 @@
 # nftmarketplace
 
+run local testnet
+```
+yarn hardhat node
+```
+
+prepare for webapp
+```
+yarn hardhat run src/prepare.ts --network localhost
+```
 
 ref: https://dev.to/dabit3/building-scalable-full-stack-apps-on-ethereum-with-polygon-2cfb
 https://github.com/dabit3/polygon-ethereum-nextjs-marketplace/
