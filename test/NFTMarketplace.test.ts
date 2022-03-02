@@ -29,25 +29,17 @@ describe("NFTMarketplace", function () {
     market = await Market.deploy()
     listingFee = await market.getListingFee()
 
-    // console.log("1. == mint 1-6 to account#0")
-    for(let i=1;i<=6;i++){
-      await nft.mintTo(address0)
-    }
-    
-    // console.log("3. == mint 7-9 to account#1")
-    for(let i=7;i<=9;i++){
-      await nft.connect(account1).mintTo(address1)
-    }
-
   })
 
   it("Should create market item successfully", async function() {
+    await nft.mintTo(address0)  //tokenId=1
     await nft.approve(market.address,1)
     await market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee })
 
   })
 
   it("Should create market item with EVENT", async function() {
+    await nft.mintTo(address0)  //tokenId=1
     await nft.approve(market.address,1)
     await expect(market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee }))
       .to.emit(market, 'MarketItemCreated')
@@ -62,12 +54,14 @@ describe("NFTMarketplace", function () {
   })
 
   it("Should revert to create market item if nft is not approved", async function() {
+    await nft.mintTo(address0)  //tokenId=1
     // await nft.approve(market.address,1)
     await expect(market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee }))
       .to.be.revertedWith('NFT must be approved to market')
   })
 
   it("Should create market item and buy (by address#1) successfully", async function() {
+    await nft.mintTo(address0)  //tokenId=1
     await nft.approve(market.address,1)
     await market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee })
 
@@ -75,21 +69,30 @@ describe("NFTMarketplace", function () {
 
   })
 
-  it("Should create market item and delete(de-list) successfully (!!TODO)", async function() {
+  it("Should revert buy if seller remove approve", async function() {
+    await nft.mintTo(address0)  //tokenId=1
     await nft.approve(market.address,1)
-//    console.log(await nft.getApproved(1))
     await market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee })
-    await market.deleteMarketItem(1)
- 
-//    console.log(await nft.getApproved(1))
-    // expect(await nft.getApproved(1)).to.equal(ethers.constants.AddressZero)        
 
-    // should revert if trying to delete again
-    await expect(market.deleteMarketItem(1))
+    await nft.approve(ethers.constants.AddressZero,1)
+
+    await expect(market.connect(account1).createMarketSale(nft.address, 1, { value: auctionPrice}))
+      .to.be.reverted
+  })
+
+  it("Should revert buy if seller transfer the token out", async function() {
+    await nft.mintTo(address0)  //tokenId=1
+    await nft.approve(market.address,1)
+    await market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee })
+
+    await nft.transferFrom(address0,address2,1)
+
+    await expect(market.connect(account1).createMarketSale(nft.address, 1, { value: auctionPrice}))
       .to.be.reverted
   })
 
   it("Should revert to delete(de-list) with wrong params", async function() {
+    await nft.mintTo(address0)  //tokenId=1
     await nft.approve(market.address,1)
     await market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee })
 
@@ -104,11 +107,20 @@ describe("NFTMarketplace", function () {
     await expect(market.deleteMarketItem(1)).to.be.reverted
   })
 
-  it("Should fetchActiveItems correctly", async function() {
+  it("Should create market item and delete(de-list) successfully (!!TODO)", async function() {
+    await nft.mintTo(address0)  //tokenId=1
     await nft.approve(market.address,1)
+
     await market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee })
+    await market.deleteMarketItem(1)
 
+    //TODO
+    //currently: remove approve by ourself instead of relying on Marketpalce contract
+    await nft.approve(ethers.constants.AddressZero,1)
 
-  })  
+    // should revert if trying to delete again
+    await expect(market.deleteMarketItem(1))
+      .to.be.reverted
+  })
 
 })

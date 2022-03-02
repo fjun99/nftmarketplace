@@ -9,6 +9,7 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 
 import "hardhat/console.sol";
 
@@ -127,9 +128,25 @@ contract NFTMarketplace is ReentrancyGuard {
     require(IERC721(item.nftContract).ownerOf(item.tokenId) == msg.sender, "must be the owner");
     require(IERC721(item.nftContract).getApproved(item.tokenId) == address(this), "NFT must be approved to market");
 
-    // delegatecall by msg.sender to nft.approve()
+    // TODO: try to delegatecall by msg.sender to nft.approve()
 
-    // IERC721(item.nftContract).approve(address(0x70997970C51812dc3A010C7d01b50e0d17dc79C8), 1); //must approve all
+    // bytes memory r = Address.functionDelegateCall(
+    //   item.nftContract, 
+    //   abi.encodeWithSignature("ownerOf(uint256)",1)
+    // );
+    // console.log(abi.decode(r,(address)));
+
+    // bytes memory r2 = Address.functionCall(
+    //   item.nftContract, 
+    //   abi.encodeWithSignature("name()",1)
+    // );
+    // console.log(string(r2));
+
+
+/*
+    //option 1, don't work as market contract must be approved all
+    IERC721(item.nftContract).approve(address(0x70997970C51812dc3A010C7d01b50e0d17dc79C8), 1); 
+*/
 
 /*
     (bool success, )  = 

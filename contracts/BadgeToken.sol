@@ -24,8 +24,9 @@ contract BadgeToken is ERC721 {
      */
     function mintTo(address _to) public {
         uint256 newTokenId = _getNextTokenId();
-        _mint(_to, newTokenId);
         // console.log("Solidity log - newTokenId:",newTokenId);        
+
+        _mint(_to, newTokenId);
 
         _incrementTokenId();
     }
