@@ -1,4 +1,8 @@
 # nftmarketplace
+run unit test
+```
+yarn hardhat test
+```
 
 run local testnet
 ```
