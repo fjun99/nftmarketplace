@@ -130,18 +130,19 @@ contract NFTMarketplace is ReentrancyGuard {
 
     // TODO: try to delegatecall by msg.sender to nft.approve()
 
+    // !wrong delegate call
     // bytes memory r = Address.functionDelegateCall(
     //   item.nftContract, 
     //   abi.encodeWithSignature("ownerOf(uint256)",1)
     // );
     // console.log(abi.decode(r,(address)));
 
+    // !ok call
     // bytes memory r2 = Address.functionCall(
     //   item.nftContract, 
     //   abi.encodeWithSignature("name()",1)
     // );
     // console.log(string(r2));
-
 
 /*
     //option 1, don't work as market contract must be approved all
