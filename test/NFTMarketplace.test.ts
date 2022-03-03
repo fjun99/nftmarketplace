@@ -3,7 +3,7 @@ import { expect } from "chai"
 import { BigNumber, Signer } from "ethers"
 import { ethers } from "hardhat"
 import { BadgeToken, NFTMarketplace } from  "../typechain"
-import { TransactionResponse, TransactionRequest } from "@ethersproject/providers"
+import { TransactionResponse, TransactionReceipt } from "@ethersproject/providers"
 
 const _name='BadgeToken'
 const _symbol='BADGE'
@@ -127,7 +127,8 @@ describe("NFTMarketplace", function () {
   })
 
   it("Should seller, buyer and market owner correct ETH value after sale", async function() {
-    let txresponse, txreceipt,gas
+    let txresponse:TransactionResponse, txreceipt:TransactionReceipt
+    let gas
     const marketownerBalance = await ethers.provider.getBalance(address0)
 
     await nft.connect(account1).mintTo(address1)  //tokenId=1
