@@ -133,6 +133,9 @@ contract NFTMarketplace is ReentrancyGuard {
     // 1) contract is called in caller storage
     // 2) user doesn't authorize contract to do that.
 
+    // Storage, current address and balance still refer to the calling contract,
+    // only the code is taken from the called address. (From solidity docs)
+
     // !wrong delegate call
     // bytes memory r = Address.functionDelegateCall(
     //   item.nftContract, 
