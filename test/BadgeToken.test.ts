@@ -1,3 +1,4 @@
+// test/BadgeToken.test.ts
 import { expect } from "chai"
 import { Signer } from "ethers"
 import { ethers } from "hardhat"
@@ -9,7 +10,6 @@ const _name='BadgeToken'
 const _symbol='BADGE'
 
 describe("BadgeToken", function () {
-
   let badge:BadgeToken
   let account0:Signer,account1:Signer
   
@@ -24,7 +24,7 @@ describe("BadgeToken", function () {
     expect(await badge.symbol()).to.equal(_symbol)
   })
 
-  it("Should mint two token with token ID 1 & 2 to account1", async function () {
+  it("Should tokenId start from 1 and auto increment", async function () {
     const address1=await account1.getAddress()
     await badge.mintTo(address1)
     expect(await badge.ownerOf(1)).to.equal(address1)
@@ -37,8 +37,8 @@ describe("BadgeToken", function () {
   it("Should mint a token with event", async function () {
     const address1=await account1.getAddress()
     await expect(badge.mintTo(address1))
-    .to.emit(badge, 'Transfer')
-    .withArgs(ethers.constants.AddressZero,address1, 1)
+      .to.emit(badge, 'Transfer')
+      .withArgs(ethers.constants.AddressZero,address1, 1)
   })
 
   it("Should mint a token with desired tokenURI (log result for inspection)", async function () {

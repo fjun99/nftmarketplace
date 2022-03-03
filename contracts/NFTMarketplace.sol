@@ -141,7 +141,7 @@ contract NFTMarketplace is ReentrancyGuard {
     //   item.nftContract, 
     //   abi.encodeWithSignature("ownerOf(uint256)",1)
     // );
-    // console.log(abi.decode(r,(address)));
+    // console.log(abi.decode(r,(address)));  
 
     // !ok call
     // bytes memory r2 = Address.functionCall(
@@ -167,12 +167,6 @@ contract NFTMarketplace is ReentrancyGuard {
       State.Inactive
     );
 
-    // console.log("item.state",uint(item.state));
-
-    //https://docs.soliditylang.org/en/v0.8.12/control-structures.html
-    //The low-level functions call, delegatecall and staticcall return true as their first return value 
-    //if the account called is non-existent, as part of the design of the EVM. 
-    //Account existence must be checked prior to calling if needed.
   }
 
   /**

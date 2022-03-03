@@ -1,24 +1,21 @@
+// src/playMarket.ts
 import { Signer } from "ethers"
 import { ethers } from "hardhat"
-// import { base64 } from "ethers/lib/utils"
 import { BadgeToken, NFTMarketplace } from  "../typechain"
 
 const base64 = require( "base-64")
 
-// const tokenAddress='0x5FbDB2315678afecb367f032d93F642f64180aa3'
-// const marketAddress='0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 const _name='BadgeToken'
 const _symbol='BADGE'
 
 async function main() {
 
-  let owner:Signer,account1:Signer
-  
-  [owner, account1] = await ethers.getSigners()
+  let account0:Signer,account1:Signer
+  [account0, account1] = await ethers.getSigners()
+  const address0=await account0.getAddress()
+  const address1=await account1.getAddress()
 
-  // const market:NFTMarketplace = await ethers.getContractAt("NFTMarketplace", marketAddress)
-  // const nft:BadgeToken = await ethers.getContractAt("BadgeToken", tokenAddress)
-
+ 
   /* deploy the marketplace */
   const Market = await ethers.getContractFactory("NFTMarketplace")
   const market:NFTMarketplace = await Market.deploy()
@@ -35,7 +32,6 @@ async function main() {
   console.log("nftContractAddress",tokenAddress)
 
   /* create two tokens */
-  const address0=await owner.getAddress()
   await nft.mintTo(address0) //'1'
   await nft.mintTo(address0) //'2' 
   await nft.mintTo(address0) //'3'
@@ -53,13 +49,11 @@ async function main() {
   await market.createMarketItem(tokenAddress, 2, auctionPrice, { value: listingFee })
   await market.createMarketItem(tokenAddress, 3, auctionPrice, { value: listingFee })
 
-  const [_, buyerAddress] = await ethers.getSigners()
-
   // test transfer
-  await nft.transferFrom(await owner.getAddress(),await account1.getAddress(),2)
+  await nft.transferFrom(address0,address1,2)
 
   /* execute sale of token to another user */
-  await market.connect(buyerAddress).createMarketSale(tokenAddress, 1, { value: auctionPrice})
+  await market.connect(account1).createMarketSale(tokenAddress, 1, { value: auctionPrice})
 
   /* query for and return the unsold items */
   console.log("==after purchase & Transfer==")
@@ -73,9 +67,6 @@ async function main() {
   console.log("==after delete==")
   await market.deleteMarketItem(3)
 
-  // should revert
-  // await market.connect(buyerAddress).deleteMarketItem(3)
-
   items = await market.fetchActiveItems()
   printitems = await parseItems(items,nft)
   printitems.map((item)=>{printHelper(item,true,false)})
@@ -86,12 +77,9 @@ async function main() {
   printitems = await parseItems(items,nft)
   printitems.map((item)=>{printHelper(item,true,false)})
 
-  // console.log( await parseItems(items,nft))
-
-
-  console.log("==address1 purchased items==")
-  items = await market.connect(buyerAddress).fetchMyPurchasedItems()
-  // console.log( await parseItems(items,nft))
+  console.log("")
+  console.log("==address1 purchased item (only one, tokenId =1)==")
+  items = await market.connect(account1).fetchMyPurchasedItems()
   printitems = await parseItems(items,nft)
   printitems.map((item)=>{printHelper(item,true,true)})
 
