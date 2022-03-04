@@ -1,3 +1,4 @@
+// src/prepare.ts
 import { Signer } from "ethers"
 import { ethers } from "hardhat"
 import { BadgeToken, NFTMarketplace } from  "../typechain"

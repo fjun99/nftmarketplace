@@ -112,7 +112,7 @@ describe("NFTMarketplace", function () {
     await expect(market.deleteMarketItem(1)).to.be.reverted
   })
 
-  it("Should create market item and delete(de-list) successfully (!!TODO)", async function() {
+  it("Should create market item and delete(de-list) successfully", async function() {
     await nft.mintTo(address0)  //tokenId=1
     await nft.approve(market.address,1)
 

@@ -128,33 +128,6 @@ contract NFTMarketplace is ReentrancyGuard {
     require(IERC721(item.nftContract).ownerOf(item.tokenId) == msg.sender, "must be the owner");
     require(IERC721(item.nftContract).getApproved(item.tokenId) == address(this), "NFT must be approved to market");
 
-    // TODO: try to delegatecall by msg.sender to nft.approve()
-    // This ideas is not correct. Maybe we can do this! two reasons:
-    // 1) contract is called in caller storage
-    // 2) user doesn't authorize contract to do that.
-
-    // Storage, current address and balance still refer to the calling contract,
-    // only the code is taken from the called address. (From solidity docs)
-
-    // !wrong delegate call
-    // bytes memory r = Address.functionDelegateCall(
-    //   item.nftContract, 
-    //   abi.encodeWithSignature("ownerOf(uint256)",1)
-    // );
-    // console.log(abi.decode(r,(address)));  
-
-    // !ok call
-    // bytes memory r2 = Address.functionCall(
-    //   item.nftContract, 
-    //   abi.encodeWithSignature("name()")
-    // );
-    // console.log(string(r2));
-
-/*
-    //option 1, don't work as market contract must be approved all for NFT contract
-    IERC721(item.nftContract).approve(address(0x70997970C51812dc3A010C7d01b50e0d17dc79C8), 1); 
-*/
-
     item.state = State.Inactive;
 
     emit MarketItemSaled(
@@ -263,7 +236,7 @@ contract NFTMarketplace is ReentrancyGuard {
   } 
 
   /**
-   * @dev fetch helper to build condition
+   * @dev helper to build condition
    *
    * todo should reduce duplicate contract call here
    * (IERC721(item.nftContract).getApproved(item.tokenId) called in two loop
