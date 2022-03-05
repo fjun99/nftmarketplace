@@ -1,4 +1,4 @@
-// contracts/Market.sol
+// contracts/NFTMarketplace.sol
 // SPDX-License-Identifier: MIT OR Apache-2.0
 // 
 // adapt and edit from (Nader Dabit): 
@@ -35,10 +35,6 @@ contract NFTMarketplace is ReentrancyGuard {
 
   mapping(uint256 => MarketItem) private marketItems;
 
-  /**
-   * @dev 
-   * todo sale event
-   */
   event MarketItemCreated (
     uint indexed id,
     address indexed nftContract,
@@ -49,7 +45,7 @@ contract NFTMarketplace is ReentrancyGuard {
     State state
   );
 
-  event MarketItemSaled (
+  event MarketItemSold (
     uint indexed id,
     address indexed nftContract,
     uint256 indexed tokenId,
@@ -130,7 +126,7 @@ contract NFTMarketplace is ReentrancyGuard {
 
     item.state = State.Inactive;
 
-    emit MarketItemSaled(
+    emit MarketItemSold(
       itemId,
       item.nftContract,
       item.tokenId,
@@ -170,7 +166,7 @@ contract NFTMarketplace is ReentrancyGuard {
     item.state = State.Release;
     _itemSoldCounter.increment();    
 
-    emit MarketItemSaled(
+    emit MarketItemSold(
       id,
       nftContract,
       tokenId,

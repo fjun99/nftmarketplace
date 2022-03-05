@@ -68,7 +68,18 @@ describe("NFTMarketplace", function () {
     await nft.approve(market.address,1)
     await market.createMarketItem(nft.address, 1, auctionPrice, { value: listingFee })
 
-    await market.connect(account1).createMarketSale(nft.address, 1, { value: auctionPrice})
+    // await 
+
+    await expect(market.connect(account1).createMarketSale(nft.address, 1, { value: auctionPrice}))
+      .to.emit(market, 'MarketItemSold')
+      .withArgs(
+        1,
+        nft.address,
+        1,
+        address0,
+        address1,
+        auctionPrice, 
+        1)
 
     expect(await nft.ownerOf(1)).to.be.equal(address1)
 
