@@ -69,7 +69,7 @@ contract NFTMarketplace is ReentrancyGuard {
   /**
    * @dev create a MarketItem for NFT sale on the marketplace.
    * 
-   * List a NFT.
+   * List an NFT.
    */
   function createMarketItem(
     address nftContract,
@@ -112,7 +112,7 @@ contract NFTMarketplace is ReentrancyGuard {
   /**
    * @dev delete a MarketItem from the marketplace.
    * 
-   * de-List a NFT.
+   * de-List an NFT.
    * 
    * todo ERC721.approve can't work properly!! comment out
    */
