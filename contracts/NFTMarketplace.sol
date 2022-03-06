@@ -157,14 +157,13 @@ contract NFTMarketplace is ReentrancyGuard {
     require(msg.value == price, "Please submit the asking price");
     require(IERC721(nftContract).getApproved(tokenId) == address(this), "NFT must be approved to market");
 
-    IERC721(nftContract).transferFrom(item.seller, msg.sender, tokenId);
-
-    payable(marketowner).transfer(listingFee);
-    item.seller.transfer(msg.value);
-
     item.buyer = payable(msg.sender);
     item.state = State.Release;
     _itemSoldCounter.increment();    
+
+    IERC721(nftContract).transferFrom(item.seller, msg.sender, tokenId);
+    payable(marketowner).transfer(listingFee);
+    item.seller.transfer(msg.value);
 
     emit MarketItemSold(
       id,
